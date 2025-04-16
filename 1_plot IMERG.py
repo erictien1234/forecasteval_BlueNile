@@ -47,7 +47,7 @@ for i in range(249):
     
     #Setting IMERG and forecast data extent
     #extent N5.5,S--34.5;W-74.5,E-35.5
-    precip = f['Grid/precipitation'][0][1945:2345,845:1255].transpose()
+    precip = f['Grid/precipitation'][0,1945:2345,845:1255].transpose()
     theLats = f['Grid/lat'][845:1255]
     theLons = f['Grid/lon'][1945:2345]
     
@@ -66,6 +66,15 @@ for i in range(249):
     print(str(year)+' '+strmonth+' done.')
 pd.DataFrame(preccropall).to_csv('result/imerg 20012023.csv')
 
+monthmaski=np.full(249,False)
+for year in range(21):
+    for month in range(5,9):
+        monthmaski[month+year*12]=True
+
+preccropall=pd.DataFrame(preccropall[monthmaski])*24
+preccropreshape=preccropall.values.reshape(21,4)
+precjjas=preccropreshape[:,0]*30+preccropreshape[:,1]*31+preccropreshape[:,2]*31+preccropreshape[:,3]*30
+pd.DataFrame(precjjas).to_csv('result/imerg_jjas.csv')
 
 coarseimerg=precimerg.coarsen(Lats=10,Lons=10).mean()
 anoimergwetseason=xr.DataArray()
@@ -140,8 +149,8 @@ for nmmemodel in nmmelist:
     startmonth=1
     precall=[]
     precBN=[]
-    precnmmeavgL0,precnmmeavgL1,precnmmeavgL2,precnmmeavgL3,precnmmeavgL4,precnmmeavgL5,precnmmeavgL6,precnmmeavgL7=[],[],[],[],[],[],[],[]
-    precnmmelist=[precnmmeavgL0,precnmmeavgL1,precnmmeavgL2,precnmmeavgL3,precnmmeavgL4,precnmmeavgL5,precnmmeavgL6,precnmmeavgL7]
+    precnmmeavgL0,precnmmeavgL1,precnmmeavgL2,precnmmeavgL3,precnmmeavgL4,precnmmeavgL5,precnmmeavgL6,precnmmeavgL7,precnmmeavgL8=[],[],[],[],[],[],[],[],[]
+    precnmmelist=[precnmmeavgL0,precnmmeavgL1,precnmmeavgL2,precnmmeavgL3,precnmmeavgL4,precnmmeavgL5,precnmmeavgL6,precnmmeavgL7,precnmmeavgL8]
     for i in range(251):
         #Loading data
         year=startyear
