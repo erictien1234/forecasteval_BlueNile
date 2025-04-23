@@ -134,3 +134,5 @@ ax[6].set_yticks(np.arange(1,6,1),['Drought','Dry','Normal','Wet','Very wet'])
 ax[6].set_ylabel('IMERG')
 fig.legend(loc='outside lower center',bbox_to_anchor=(0.5,0.06),handlelength=0.4,ncols=5,markerscale=1.7,fontsize=14)
 plt.show()
+
+dfcatall.to_csv('result/NMME IMERG cat.csv')
